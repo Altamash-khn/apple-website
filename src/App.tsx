@@ -29,14 +29,14 @@ export default function App() {
   });
 
   return (
-    <div className="w-screen h-screen bg-black text-white flex flex-col items-center justify-center gap-6">
+    <div className="w-screen h-screen bg-blue text-white flex flex-col items-center justify-center gap-6">
       <div id="logo" className="w-32 h-32 rounded-3xl bg-red-600"></div>
 
       <h1 id="title" className="text-5xl font-bold">
         NETFLIX
       </h1>
 
-      <button id="button" className="px-6 py-3 bg-red-600 rounded-xl">
+      <button id="button" className="p-5 bg-red-600 rounded-xl">
         Watch Now
       </button>
     </div>
