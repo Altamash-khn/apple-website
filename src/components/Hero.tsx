@@ -1,19 +1,33 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { heroVideo, smallHeroVideo } from "../utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Hero = () => {
   const [videoSrc, setVideoSrc] = useState(
     window.innerWidth < 768 ? smallHeroVideo : heroVideo,
   );
-  useGSAP(() => {
-    gsap.fromTo(
-      "#hero",
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 1 },
-    );
+
+  function handleResize() {
+    if (window.innerWidth < 768) {
+      setVideoSrc(smallHeroVideo);
+    } else {
+      setVideoSrc(heroVideo);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
+  
+  useGSAP(() => {
+    gsap.to("#hero", { opacity: 1, y: 0, duration: 1, delay: 2.5 });
+    gsap.to("#cta", { opacity: 1, y: 0, duration: 1, delay: 2.5 });
+  }, []);
+
 
   return (
     <section className="w-full nav-height bg-black relative">
@@ -24,13 +38,17 @@ const Hero = () => {
         <div className="md:w-10/12 w-9/12">
           <video
             src={videoSrc}
-            typeof="video/mp4"
             autoPlay
-            loop
             muted
-            className="w-full rounded-lg"
+            playsInline={true}
+            className="pointer-events-none"
           />
         </div>
+      </div>
+
+      <div id="cta" className="flex flex-col items-center opacity-0 translate-y-20">
+         <a href="#highlights" className="btn">Buy</a>
+         <p className="font-normal text-xl">From $199/month or $999</p>
       </div>
     </section>
   );
