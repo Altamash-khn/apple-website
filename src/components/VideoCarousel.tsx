@@ -60,6 +60,7 @@ const VideoCarousel = () => {
 
     if (span && div) {
       anim = gsap.to(span, {
+        paused: true,
         onUpdate: () => {
           const progress = Math.ceil(anim!.progress() * 100);
 
