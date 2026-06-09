@@ -4,7 +4,7 @@ import ModelView from "./ModelView";
 import { useRef, useState } from "react";
 import { yellowImg } from "../utils";
 import * as THREE from "three";
-import { setFlagsFromString } from "v8";
+// import { setFlagsFromString } from "v8";
 import { Canvas } from "@react-three/fiber";
 import { View } from "@react-three/drei";
 
