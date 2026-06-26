@@ -86,7 +86,7 @@ canvas {
     @apply text-blue hover:underline cursor-pointer flex items-center text-xl;
   }
   .control-btn {
-    @apply ml-4 p-4 rounded-full bg-gray-300 backdrop-blur flex items-center justify-center;
+    @apply ml-4 p-4 rounded-full bg-gray-300 backdrop-blur flex items-center justify-center hover:cursor-pointer;
   }
 
   .hero-title {
