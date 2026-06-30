@@ -1,5 +1,6 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import ModelView from "./ModelView";
 import { useEffect, useRef, useState } from "react";
 import { yellowImg } from "../utils";
@@ -18,8 +19,8 @@ const Model = () => {
   });
 
   // camera control for the model view
-  const cameraControlSmall = useRef();
-  const cameraControlLarge = useRef();
+  const cameraControlSmall = useRef<OrbitControlsImpl | null>(null);
+  const cameraControlLarge = useRef<OrbitControlsImpl | null>(null);
 
   // Model
   const small = useRef(new THREE.Group());
@@ -94,7 +95,7 @@ const Model = () => {
                 right: 0,
                 overflow: "hidden",
               }}
-              eventSource={document.getElementById("root")}
+              eventSource={document.getElementById("root") || undefined}
             >
               <View.Port></View.Port>
             </Canvas>

@@ -6,32 +6,51 @@ Source: https://sketchfab.com/3d-models/apple-iphone-15-pro-max-black-df17520841
 Title: Apple iPhone 15 Pro Max Black
 */
 
-import React, { useEffect } from 'react'
-import { useGLTF, useTexture } from '@react-three/drei'
-import * as THREE from 'three'
+import { useEffect } from "react";
+import { useGLTF, useTexture } from "@react-three/drei";
+import * as THREE from "three";
 
-function Model(props) {
-  const { nodes, materials } = useGLTF('/models/scene.glb');
+type GLTFResult = {
+  nodes: Record<string, THREE.Mesh>;
+  materials: Record<string, THREE.MeshStandardMaterial>;
+};
+
+interface ModelItem {
+  title: string;
+  color: string[];
+  img: string;
+}
+
+interface ModelProps {
+  item: ModelItem;
+  scale?: [number, number, number];
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+}
+
+function Model(props: ModelProps) {
+  const { nodes, materials } = useGLTF(
+    "/models/scene.glb",
+  ) as unknown as GLTFResult;
 
   const texture = useTexture(props.item.img);
 
+  useEffect(() => {
+    Object.entries(materials).map((material) => {
+      // these are the material names that can't be changed color
+      if (
+        material[0] !== "zFdeDaGNRwzccye" &&
+        material[0] !== "ujsvqBWRMnqdwPx" &&
+        material[0] !== "hUlRcbieVuIiOXG" &&
+        material[0] !== "jlzuBkUzuJqgiAK" &&
+        material[0] !== "xNrofRCqOXXHVZt"
+      ) {
+        material[1].color = new THREE.Color(props.item.color[0]);
+      }
+      material[1].needsUpdate = true;
+    });
+  }, [materials, props.item]);
 
-    useEffect(() => {
-      Object.entries(materials).map((material) => {
-        // these are the material names that can't be changed color
-        if (
-          material[0] !== "zFdeDaGNRwzccye" &&
-          material[0] !== "ujsvqBWRMnqdwPx" &&
-          material[0] !== "hUlRcbieVuIiOXG" &&
-          material[0] !== "jlzuBkUzuJqgiAK" &&
-          material[0] !== "xNrofRCqOXXHVZt"
-        ) {
-          material[1].color = new THREE.Color(props.item.color[0]);
-        }
-        material[1].needsUpdate = true;
-      });
-    }, [materials, props.item]);
-    
   return (
     <group {...props} dispose={null}>
       <mesh
@@ -146,8 +165,7 @@ function Model(props) {
         material={materials.pIJKfZsazmcpEiU}
         scale={0.01}
       >
-                <meshStandardMaterial roughness={1} map={texture} />
-
+        <meshStandardMaterial roughness={1} map={texture as THREE.Texture} />
       </mesh>
       <mesh
         castShadow
@@ -255,9 +273,9 @@ function Model(props) {
         scale={0.01}
       />
     </group>
-  )
+  );
 }
 
-export default Model
+export default Model;
 
-useGLTF.preload('/models/scene.glb')
+useGLTF.preload("/models/scene.glb");

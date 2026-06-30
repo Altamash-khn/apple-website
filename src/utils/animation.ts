@@ -1,9 +1,11 @@
 import gsap from "gsap";
+import * as THREE from "three";
+import React from "react";
 
 import { ScrollTrigger } from "gsap/all";
 gsap.registerPlugin(ScrollTrigger);
 
-export const animateWithGsap = (target, animationProps, scrollProps) => {
+export const animateWithGsap = (target: string, animationProps: gsap.TweenVars, scrollProps: ScrollTrigger.Vars | null) => {
   gsap.to(target, {
     ...animationProps,
     scrollTrigger: {
@@ -16,12 +18,12 @@ export const animateWithGsap = (target, animationProps, scrollProps) => {
 };
 
 export const animateWithGsapTimeline = (
-  timeline,
-  rotationRef,
-  rotationState,
-  firstTarget,
-  secondTarget,
-  animationProps,
+  timeline: gsap.core.Timeline,
+  rotationRef: React.MutableRefObject<THREE.Group>,
+  rotationState: number,
+  firstTarget: string,
+  secondTarget: string,
+  animationProps: gsap.TweenVars,
 ) => {
   timeline.to(rotationRef.current.rotation, {
     y: rotationState,

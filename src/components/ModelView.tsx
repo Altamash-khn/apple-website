@@ -1,14 +1,25 @@
-import {
-  Html,
-  OrbitControls,
-  PerspectiveCamera,
-  View,
-} from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera, View } from "@react-three/drei";
 import Lights from "./Lights";
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import IPhone from "./IPhone";
 import * as THREE from "three";
 import Loader from "./Loader";
+
+interface ModelViewProps {
+  index: number;
+  groupRef: React.RefObject<THREE.Group>;
+  gsapType: string;
+  controlRef: React.RefObject<any>;
+  setRotationState: React.Dispatch<React.SetStateAction<number>>;
+  size: string;
+  item: ModelItem;
+}
+
+interface ModelItem {
+  title: string;
+  color: string[];
+  img: string;
+}
 
 const ModelView = ({
   index,
@@ -18,7 +29,7 @@ const ModelView = ({
   setRotationState,
   size,
   item,
-}) => {
+}: ModelViewProps) => {
   return (
     <View
       index={index}
@@ -32,19 +43,23 @@ const ModelView = ({
 
       <Lights />
 
-        <OrbitControls 
+      <OrbitControls
         makeDefault
         ref={controlRef}
         enableZoom={false}
         enablePan={false}
         rotateSpeed={0.5}
-        target={new THREE.Vector3(0, 0 ,0)}
+        target={new THREE.Vector3(0, 0, 0)}
         onEnd={() => setRotationState(controlRef.current.getAzimuthalAngle())}
-      /> 
+      />
 
-      <group ref={groupRef} name={`${index === 1} ? 'small' : 'large`} position={[0, 0 ,0]}>
+      <group
+        ref={groupRef}
+        name={`${index === 1} ? 'small' : 'large`}
+        position={[0, 0, 0]}
+      >
         <Suspense fallback={<Loader />}>
-          <IPhone 
+          <IPhone
             scale={index === 1 ? [15, 15, 15] : [17, 17, 17]}
             item={item}
             size={size}
