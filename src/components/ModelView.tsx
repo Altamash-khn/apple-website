@@ -27,7 +27,6 @@ const ModelView = ({
   gsapType,
   controlRef,
   setRotationState,
-  size,
   item,
 }: ModelViewProps) => {
   return (
@@ -62,7 +61,6 @@ const ModelView = ({
           <IPhone
             scale={index === 1 ? [15, 15, 15] : [17, 17, 17]}
             item={item}
-            size={size}
           />
         </Suspense>
       </group>

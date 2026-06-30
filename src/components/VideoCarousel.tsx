@@ -111,6 +111,8 @@ const VideoCarousel = () => {
       return () => {
         gsap.ticker.remove(animUpdate);
         anim?.kill();
+        gsap.to(div, { width: "12px" });
+        gsap.to(span, { width: "0%", backgroundColor: "#afafaf" });
       };
     }
 
