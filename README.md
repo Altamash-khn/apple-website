@@ -34,7 +34,7 @@ An Apple-inspired iPhone 15 Pro landing page built with React, TypeScript, React
 
 ## Project Structure
 
-<img src="/folder-structure.png" />
+<img src="/public/folder-structure.png" />
 
 ## Getting Started
 
