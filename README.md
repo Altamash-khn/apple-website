@@ -19,6 +19,9 @@ An Apple-inspired iPhone 15 Pro landing page built with React, TypeScript, React
 - Asynchronous 3D asset loading with React Suspense
 - Responsive design with Tailwind CSS
 - Built with TypeScript for type safety
+- Reduced initial bundle size through code splitting with React.lazy()
+- Deferred loading of the 3D experience using the Intersection Observer API
+- Improved the **Google PageSpeed Insights (Lighthouse)** mobile performance score from **58 to 95** after implementing code splitting and viewport-based lazy loading
 
 ## Tech Stack
 
