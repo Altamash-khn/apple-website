@@ -18,6 +18,7 @@ const VideoCarousel = () => {
   const videoRef = useRef<HTMLVideoElement[]>([]);
   const videoSpanRef = useRef<HTMLSpanElement[]>([]);
   const videoDivRef = useRef<HTMLSpanElement[]>([]);
+  const animRef = useRef<gsap.core.Tween | null>(null);
 
   const [video, setVideo] = useState({
     isEnd: false,
@@ -52,72 +53,64 @@ const VideoCarousel = () => {
     });
   }, [isEnd, videoId]);
 
-  useEffect(() => {
-    let currentProgress = 0;
-    const span = videoSpanRef.current[videoId];
-    const div = videoDivRef.current[videoId];
-    let anim: gsap.core.Tween | null = null;
+useEffect(() => {
+  const span = videoSpanRef.current[videoId];
+  const div = videoDivRef.current[videoId];
+  let anim: gsap.core.Tween | null = null;
 
-    if (span && div) {
-      anim = gsap.to(span, {
-        paused: true,
-        onUpdate: () => {
-          const progress = Math.ceil(anim!.progress() * 100);
-
-          if (progress !== currentProgress) {
-            currentProgress = progress;
-
-            gsap.to(div, {
-              width:
-                window.innerWidth < 760
-                  ? "10vw"
-                  : window.innerWidth < 1200
-                    ? "10vw"
-                    : "4vw",
-            });
-
-            gsap.to(span, {
-              width: `${currentProgress}%`,
-              backgroundColor: "white",
-            });
-          }
-        },
-
-        onComplete: () => {
-          if (isPlaying) {
-            gsap.to(div, {
-              width: "12px",
-            });
-            gsap.to(span, {
-              backgroundColor: "#afafaf",
-            });
-          }
-        },
-      });
-
-      const animUpdate = () => {
-        const video = videoRef.current[videoId];
-        const duration = hightlightsSlides[videoId]?.videoDuration;
-
-        if (!video || !duration) return;
-
-        anim!.progress(video.currentTime / duration);
-      };
-
-      if (isPlaying) {
-        gsap.ticker.add(animUpdate);
-      }
-
-      return () => {
-        gsap.ticker.remove(animUpdate);
-        anim?.kill();
+  if (span && div) {
+    anim = gsap.to(span, {
+      paused: true,
+      onUpdate: () => {
+        const progress = Math.ceil(anim!.progress() * 100);
+        gsap.to(div, {
+          width:
+            window.innerWidth < 760
+              ? "10vw"
+              : window.innerWidth < 1200
+                ? "10vw"
+                : "4vw",
+        });
+        gsap.to(span, {
+          width: `${progress}%`,
+          backgroundColor: "white",
+        });
+      },
+      onComplete: () => {
         gsap.to(div, { width: "12px" });
-        gsap.to(span, { width: "0%", backgroundColor: "#afafaf" });
-      };
-    }
+        gsap.to(span, { backgroundColor: "#afafaf" });
+      },
+    });
 
-    return undefined;
-  }, [videoId, isPlaying]);
+    animRef.current = anim;
+  }
+
+  return () => {
+    anim?.kill();
+    animRef.current = null;
+    if (span) gsap.to(span, { width: "0%", backgroundColor: "#afafaf" });
+    if (div) gsap.to(div, { width: "12px" });
+  };
+}, [videoId]); 
+
+useEffect(() => {
+  const animUpdate = () => {
+    const video = videoRef.current[videoId];
+    const duration = hightlightsSlides[videoId]?.videoDuration;
+    if (!video || !duration || !animRef.current) return;
+    animRef.current.progress(video.currentTime / duration);
+  };
+
+  if (isPlaying) {
+    gsap.ticker.add(animUpdate);
+  } else {
+    gsap.ticker.remove(animUpdate);
+  }
+
+  return () => {
+    gsap.ticker.remove(animUpdate);
+  };
+}, [isPlaying, videoId]);
 
   useEffect(() => {
     if (loadedData.every(Boolean)) {
